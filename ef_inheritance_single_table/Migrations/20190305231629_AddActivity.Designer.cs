@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ef_inheritance_single_table;
 
 namespace ef_inheritance_single_table.Migrations
 {
     [DbContext(typeof(AppContext))]
-    partial class AppContextModelSnapshot : ModelSnapshot
+    [Migration("20190305231629_AddActivity")]
+    partial class AddActivity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,22 +33,6 @@ namespace ef_inheritance_single_table.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Activities");
-                });
-
-            modelBuilder.Entity("ef_inheritance_single_table.Models.Event", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("EventType");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Events");
-
-                    b.HasDiscriminator<int>("EventType");
                 });
 
             modelBuilder.Entity("ef_inheritance_single_table.Models.Project", b =>
@@ -81,32 +67,6 @@ namespace ef_inheritance_single_table.Migrations
                     b.ToTable("ProjectActivities");
                 });
 
-            modelBuilder.Entity("ef_inheritance_single_table.Models.AdHocEvent", b =>
-                {
-                    b.HasBaseType("ef_inheritance_single_table.Models.Event");
-
-                    b.Property<bool?>("IsCentrallyCreated");
-
-                    b.Property<Guid>("ProjectActivityId")
-                        .HasColumnName("ProjectActivityId");
-
-                    b.HasIndex("ProjectActivityId");
-
-                    b.HasDiscriminator().HasValue(1);
-                });
-
-            modelBuilder.Entity("ef_inheritance_single_table.Models.PrivateEvent", b =>
-                {
-                    b.HasBaseType("ef_inheritance_single_table.Models.Event");
-
-                    b.Property<Guid>("ProjectActivityId")
-                        .HasColumnName("ProjectActivityId");
-
-                    b.HasIndex("ProjectActivityId");
-
-                    b.HasDiscriminator().HasValue(2);
-                });
-
             modelBuilder.Entity("ef_inheritance_single_table.Models.ProjectActivity", b =>
                 {
                     b.HasOne("ef_inheritance_single_table.Models.Activity", "Activity")
@@ -117,24 +77,6 @@ namespace ef_inheritance_single_table.Migrations
                     b.HasOne("ef_inheritance_single_table.Models.Project", "Project")
                         .WithMany("ProjectActivities")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ef_inheritance_single_table.Models.AdHocEvent", b =>
-                {
-                    b.HasOne("ef_inheritance_single_table.Models.ProjectActivity", "ProjectActivity")
-                        .WithMany("AdHocEvents")
-                        .HasForeignKey("ProjectActivityId")
-                        .HasConstraintName("FK_Events_ProjectActivities_ProjectActivityId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ef_inheritance_single_table.Models.PrivateEvent", b =>
-                {
-                    b.HasOne("ef_inheritance_single_table.Models.ProjectActivity", "ProjectActivity")
-                        .WithMany("PrivateEvents")
-                        .HasForeignKey("ProjectActivityId")
-                        .HasConstraintName("FK_Events_ProjectActivities_ProjectActivityId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

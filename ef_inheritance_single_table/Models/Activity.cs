@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ef_inheritance_single_table.Models
 {
-    public class Project
+    public class Activity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        
+
         public virtual ICollection<ProjectActivity> ProjectActivities { get; set; }
     }
 }
